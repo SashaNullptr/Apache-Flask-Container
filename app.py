@@ -6,6 +6,7 @@ from flask import Flask, json
 from flask_cors import CORS
 
 # Local
+from example_app.hello_world import hello_world_dictionary
 
 app = Flask(__name__)
 CORS(app)
@@ -33,7 +34,7 @@ def counter_endpoint( event=None, context=None ):
 
     """
 
-    return app.response_class( json.dumps( {"hello":"world"} ), mimetype='application/json' )
+    return app.response_class( json.dumps( hello_world_dictionary() ), mimetype='application/json' )
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
