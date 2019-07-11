@@ -4,6 +4,8 @@ MAINTAINER Sasha Fox "sashanullptr@gmail.com"
 
 # Ubuntu 16.04 doesn't have a repository for Python 3.6 by default but it is
 # required by a few dependencies.
+RUN apt-get update
+RUN apt-get install software-properties-common -y
 RUN add-apt-repository ppa:deadsnakes/ppa -y
 RUN apt-get update
 
