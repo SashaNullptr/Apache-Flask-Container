@@ -27,7 +27,7 @@ RUN python3.6 -m pip install -r requirements.txt
 COPY . /var/www/example_app
 
 # Copy WSGI script for the app
-COPY ./apache2_files/librarian_qas.wsgi /var/www/wsgi_scripts
+COPY ./apache2_files/example_app.wsgi /var/www/wsgi_scripts
 
 # Make directory for apache2 logs
 RUN mkdir /var/www/example_app/logs
