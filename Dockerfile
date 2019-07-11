@@ -23,16 +23,16 @@ RUN python3.6 -m pip install mod_wsgi
 
 COPY ./requirements.txt /app_files/requirements.txt
 
-RUN python3.6 -m pip install -r requirements.txt
+RUN python3.6 -m pip install -r /app_files/requirements.txt
 
 # Make directory for the app
 COPY . /var/www/example_app
 
-# Copy WSGI script for the app
-COPY ./apache2_files/example_app.wsgi /var/www/wsgi_scripts
-
 # Make directory for apache2 logs
 RUN mkdir /var/www/example_app/logs
+
+# Copy WSGI script for the app
+COPY ./apache2_files/example_app.wsgi /var/www/wsgi_scripts/example_app.wsgi
 
 # # Set permissions for www directory
 # RUN chown -R www-data  /var/www
@@ -44,11 +44,13 @@ RUN mkdir /var/www/example_app/logs
 # RUN chmod -R 755 /var/www/wsgi_scripts
 
 # Append to end of apache2.conf
-COPY ./apache2_files/apache2_addon.txt ./apache2_files/apache2_addon.txt
-RUN cat ./apache2_files/apache2_addon.txt | sudo tee -a /etc/apache2/apache2.conf >/dev/null
+COPY ./apache2_files/apache2_addon.txt ./app_files/apache2_addon.txt
+RUN cat ./app_files/apache2_addon.txt | tee -a /etc/apache2/apache2.conf >/dev/null
+
+RUN a2enmod rewrite
 
 # Add app .conf file to apache2's sites-available
-COPY ./apache2_files/app.conf /etc/apache2/sites-available
+COPY ./apache2_files/app.conf /etc/apache2/sites-available/app.conf
 # Disable default site
 RUN a2dissite 000-default
 # Enable app site
