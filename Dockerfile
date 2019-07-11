@@ -14,20 +14,23 @@ RUN python3.6 -m pip install --upgrade pip
 
 # Install HTTP Server
 RUN apt-get install -y apache2 apache2-dev
+
 # Install the python 3.6 version of mod-WSGI for apache2
 # This will ensure that the python3.6 interpreter will be used by the WSGI process.
 RUN python3.6 -m pip install mod_wsgi
 
+COPY ./requirements.txt /app_files/requirements.txt
+
+RUN python3.6 -m pip install -r requirements.txt
+
 # Make directory for the app
-RUN mkdir /var/www/example_app
+COPY . /var/www/example_app
 
-COPY ./requirements.txt /app/requirements.txt
+# Copy WSGI script for the app
+COPY ./apache2_files/librarian_qas.wsgi /var/www/wsgi_scripts
 
-WORKDIR /app
-
-RUN pip3 install -r requirements.txt
-
-COPY . /app
+# Make directory for apache2 logs
+RUN mkdir /var/www/example_app/logs
 
 # # Set permissions for www directory
 # RUN chown -R www-data  /var/www
@@ -39,7 +42,7 @@ COPY . /app
 # RUN chmod -R 755 /var/www/wsgi_scripts
 
 # Append to end of apache2.conf
-COPY ./apache2_files/apache2_addon.txt
+COPY ./apache2_files/apache2_addon.txt ./apache2_files/apache2_addon.txt
 RUN cat ./apache2_files/apache2_addon.txt | sudo tee -a /etc/apache2/apache2.conf >/dev/null
 
 # Add app .conf file to apache2's sites-available
