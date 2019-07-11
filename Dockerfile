@@ -29,13 +29,14 @@ RUN pip3 install -r requirements.txt
 
 COPY . /app
 
-# Set permissions for www directory
-RUN chown -R www-data  /var/www
-RUN chgrp -R www-data  /var/www
-RUN chmod -R 755  /var/www
-RUN chmod g+s  /var/www
-# Set permissions for WSGI directory
-RUN chmod -R 755 /var/www/wsgi_scripts
+# # Set permissions for www directory
+# RUN chown -R www-data  /var/www
+# RUN chgrp -R www-data  /var/www
+# RUN chmod -R 755  /var/www
+# RUN chmod g+s  /var/www
+#
+# # Set permissions for WSGI directory
+# RUN chmod -R 755 /var/www/wsgi_scripts
 
 # Append to end of apache2.conf
 COPY ./apache2_files/apache2_addon.txt
