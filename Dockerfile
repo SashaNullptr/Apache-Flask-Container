@@ -25,15 +25,6 @@ COPY ./requirements.txt /app_files/requirements.txt
 
 RUN python3.6 -m pip install -r /app_files/requirements.txt
 
-# Make directory for the app
-COPY . /var/www/example_app
-
-# Make directory for apache2 logs
-RUN mkdir /var/www/example_app/logs
-
-# Copy WSGI script for the app
-COPY ./apache2_files/example_app.wsgi /var/www/wsgi_scripts/example_app.wsgi
-
 # # Set permissions for www directory
 # RUN chown -R www-data  /var/www
 # RUN chgrp -R www-data  /var/www
@@ -49,8 +40,8 @@ RUN cat ./app_files/apache2_addon.txt | tee -a /etc/apache2/apache2.conf >/dev/n
 
 RUN a2enmod rewrite
 
-# Add app .conf file to apache2's sites-available
-COPY ./apache2_files/app.conf /etc/apache2/sites-available/app.conf
+# # Add app .conf file to apache2's sites-available
+# COPY ./apache2_files/app.conf /etc/apache2/sites-available/app.conf
 # Disable default site
 RUN a2dissite 000-default
 # Enable app site
