@@ -19,7 +19,6 @@ services:
       - ./flask_app.py:/var/www/app/flask_app.py
       - ./apache2_files/app.wsgi:/var/www/wsgi_scripts/app.wsgi
       - ./apache2_files/app.conf:/etc/apache2/sites-available/000-default.conf
-      - ./apache2_files/apache2.conf:/etc/apache2/apache2.conf
 
 networks:
   external_network:

@@ -13,7 +13,6 @@ docker run -dt \
   -v ./flask_app.py:/var/www/app/flask_app.py
   -v ./apache2_files/app.wsgi:/var/www/wsgi_scripts/app.wsgi
   -v ./apache2_files/app.conf:/etc/apache2/sites-available/000-default.conf
-  -v ./apache2_files/apache2.conf:/etc/apache2/apache2.conf
   -p 5000:80 \
   --name flask-app \
   --restart=always \
