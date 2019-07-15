@@ -24,16 +24,6 @@ RUN python3.6 -m pip install mod_wsgi
 COPY ./requirements.txt /app_files/requirements.txt
 
 RUN python3.6 -m pip install -r /app_files/requirements.txt
-
-# # Set permissions for www directory
-# RUN chown -R www-data  /var/www
-# RUN chgrp -R www-data  /var/www
-# RUN chmod -R 755  /var/www
-# RUN chmod g+s  /var/www
-#
-# # Set permissions for WSGI directory
-# RUN chmod -R 755 /var/www/wsgi_scripts
-
 # Append to end of apache2.conf
 COPY ./apache2_files/apache2_addon.txt ./app_files/apache2_addon.txt
 RUN cat ./app_files/apache2_addon.txt | tee -a /etc/apache2/apache2.conf >/dev/null
