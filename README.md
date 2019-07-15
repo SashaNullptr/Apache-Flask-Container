@@ -4,6 +4,13 @@
 
 A Docker file for  hosting Flask apps with apache2 acting as the HTTP server.
 
+## How Does This Container Work?
+
+We need to map host app files to the following directories:
+
+* App root directory `/var/www/app/`
+* Flask root file `/var/www/app/flask_app.py`
+* WSGI file `/var/www/app/flask_app.py`
 
 ## Run The Docker Image
 
