@@ -18,9 +18,7 @@ RUN apt-get install -y libapache2-mod-wsgi-py3
 RUN a2enmod rewrite
 RUN service apache2 restart
 
-COPY ./requirements.txt /app_files/requirements.txt
-
-RUN pip3 install -r /app_files/requirements.txt
+RUN pip3 install flask flask_cors
 
 # Since we'll be mapping things to 000-default.conf via docker volumes we need
 # to enable and disable the site to trigger a refresh.
