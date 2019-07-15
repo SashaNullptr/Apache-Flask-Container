@@ -15,6 +15,10 @@ RUN apt-get install -y apache2 apache2-dev apache2-utils ssl-cert
 # Install mod-WSGI for apache2
 RUN apt-get install -y libapache2-mod-wsgi-py3
 
+COPY ./apache2_files/app.conf ./app_files/app.conf
+RUN mv ./app_files/app.conf /etc/apache2/sites-available/000-default.conf
+RUN rm -r ./app_files
+
 RUN a2enmod rewrite
 RUN service apache2 restart
 

@@ -7,6 +7,22 @@ A Docker file for  hosting Flask apps with apache2 acting as the HTTP server.
 
 ## Run The Docker Image
 
+### Using built-in `conf` file
+
+```shell
+docker run -dt \
+  -v ./example_app:/var/www/app/example_app
+  -v ./flask_app.py:/var/www/app/flask_app.py
+  -v ./apache2_files/app.wsgi:/var/www/wsgi_scripts/app.wsgi
+  -p 5000:80 \
+  --name flask-app \
+  --restart=always \
+  sashanullptr/flask-apache
+```
+
+
+### Using a Custom `conf` file
+
 ```shell
 docker run -dt \
   -v ./example_app:/var/www/app/example_app
