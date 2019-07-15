@@ -34,10 +34,10 @@ RUN a2enmod rewrite
 # COPY ./apache2_files/app.conf /etc/apache2/sites-available/app.conf
 # Disable default site
 RUN a2dissite 000-default
-# Enable app site
-RUN a2ensite app
-# Reload apache2
-RUN service apache2 restart
+# # Enable app site
+# RUN a2ensite app
+# # Reload apache2
+# RUN service apache2 restart
 
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data

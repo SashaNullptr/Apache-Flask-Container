@@ -17,7 +17,7 @@ services:
     volumes:
       - .:/var/www/app
       - ./apache2_files/example_app.wsgi:/var/www/wsgi_scripts/app.wsgi
-      - ./apache2_files/app.conf:/etc/apache2/sites-available/app.conf
+      - ./apache2_files/app.conf:/etc/apache2/sites-available/000-default.conf
       - ./apache2_files/apache2.conf.txt:/etc/apache2/apache2.conf
 
 networks:
