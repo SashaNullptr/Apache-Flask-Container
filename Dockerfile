@@ -2,6 +2,10 @@ FROM ubuntu:18.04
 
 MAINTAINER Sasha Fox "sashanullptr@gmail.com"
 
+ARG APP_ROOT_DIR
+ARG FLASK_ROOT_FILE
+ARG WSGI_FILE
+
 RUN apt-get update
 
 # Install basic build requirements.
@@ -19,10 +23,16 @@ COPY ./apache2_files/app.conf ./app_files/app.conf
 RUN mv ./app_files/app.conf /etc/apache2/sites-available/000-default.conf
 RUN rm -r ./app_files
 
+RUN pip3 install flask flask_cors
+
+COPY $APP_ROOT_DIR /var/www/app/
+RUN pip3 install /var/www/app/
+
+COPY $FLASK_ROOT_FILE /var/www/app/flask_app.py
+COPY $WSGI_FILE /var/www/wsgi_scripts/app.wsgi
+
 RUN a2enmod rewrite
 RUN service apache2 restart
-
-RUN pip3 install flask flask_cors
 
 # Since we'll be mapping things to 000-default.conf via docker volumes we need
 # to enable and disable the site to trigger a refresh.
