@@ -5,6 +5,10 @@ services:
     restart: always
     image: flask_app:latest
     build: .
+      args:
+        ARG APP_ROOT_DIR : ./example_app
+        ARG FLASK_ROOT_FILE: ./flask_app.py
+        ARG WSGI_FILE: ./apache2_files/app.wsgi
     networks:
       - external_network
     healthcheck:
@@ -14,11 +18,6 @@ services:
         retries: 5
     ports:
       - 5000:80
-    volumes:
-      - ./example_app:/var/www/app/example_app
-      - ./flask_app.py:/var/www/app/flask_app.py
-      - ./apache2_files/app.wsgi:/var/www/wsgi_scripts/app.wsgi
-      # - ./apache2_files/app.conf:/etc/apache2/sites-available/000-default.conf
 
 networks:
   external_network:
