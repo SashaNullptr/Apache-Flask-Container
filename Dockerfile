@@ -5,6 +5,7 @@ MAINTAINER Sasha Fox "sashanullptr@gmail.com"
 ARG APP_ROOT_DIR
 ARG FLASK_ROOT_FILE
 ARG WSGI_FILE
+ARG APACHE_CONF="./apache2_files/app.conf"
 
 RUN apt-get update
 
