@@ -2,42 +2,108 @@
 
 ## What is this repo?
 
-A Docker file for  hosting Flask apps with apache2 acting as the HTTP server.
+A template for hosting Flask apps with Apache2 acting as the HTTP server.
 
-## How Does This Container Work?
+## Outline
 
-We need to map host app files to the following directories:
+The Dockerfile works by copying Flask app project files directly into the
+container and installing dependencies at build time.
 
-* App root directory `/var/www/app/`
-* Flask root file `/var/www/app/flask_app.py`
-* WSGI file `/var/www/app/flask_app.py`
+## Build Arguments
+
+The Dockerfile needs to know where core app files are located so they can be
+copied onto the container. Project files are specific via build arguments. The
+following *must* be specified at build time.
+
+| Argument        | Description                               |
+|-----------------|-------------------------------------------|
+| APP_ROOT_DIR    | Project root directory                    |
+| FLASK_ROOT_FILE | Root Flask app Python file                |
+| WSGI_FILE       | WSGI file that references FLASK_ROOT_FILE |
+
+For example if our Flask app had the following layout:
+
+```shell
+.
+├── Dockerfile
+├── apache2_files
+│   └── app.wsgi
+├── example_app
+│   ├── __init__.py
+│   └── ...
+├── flask_app.py
+```
+
+We'd want our build args set up like so:
+
+| Argument        | File Path                |
+|-----------------|--------------------------|
+| APP_ROOT_DIR    | ./example_app            |
+| FLASK_ROOT_FILE | ./flask_app.py           |
+| WSGI_FILE       | ./apache2_files/app.wsgi |
+
+## Build The Docker Image
+
+Using the example project layout given above we'd build our container
+as follows
+
+``` shell
+docker build -dt \
+  --build-arg APP_ROOT_DIR="./example_app" \
+  --build-arg FLASK_ROOT_FILE="./flask_app.py" \
+  --build-arg WSGI_FILE="./apache2_files/app.wsgi" \
+  --name flask-app \
+  .
+```
 
 ## Run The Docker Image
 
-### Using built-in `conf` file
+The only thing that really needs to be handled when running the resulting container is port
+mapping. Port 80 is exposed by default and if there's a desire to map this to an
+alternate port on the host that needs to be handled with the `-p` run flag.
 
-```shell
+``` shell
 docker run -dt \
-  -v ./example_app:/var/www/app/example_app
-  -v ./flask_app.py:/var/www/app/flask_app.py
-  -v ./apache2_files/app.wsgi:/var/www/wsgi_scripts/app.wsgi
   -p 5000:80 \
   --name flask-app \
   --restart=always \
-  sashanullptr/flask-apache
+  flask-app
 ```
 
+## Example Docker-Compose File
 
-### Using a Custom `conf` file
+Again assuming our project is laid out as in our example we could tie everything
+together using a Docker-Compose file.
 
-```shell
-docker run -dt \
-  -v ./example_app:/var/www/app/example_app
-  -v ./flask_app.py:/var/www/app/flask_app.py
-  -v ./apache2_files/app.wsgi:/var/www/wsgi_scripts/app.wsgi
-  -v ./apache2_files/app.conf:/etc/apache2/sites-available/000-default.conf
-  -p 5000:80 \
-  --name flask-app \
-  --restart=always \
-  sashanullptr/flask-apache
+```yaml
+version: '2.2'
+services:
+
+  flask:
+    restart: always
+    image: flask_app:latest
+    build: .
+      args:
+        ARG APP_ROOT_DIR : ./example_app
+        ARG FLASK_ROOT_FILE: ./flask_app.py
+        ARG WSGI_FILE: ./apache2_files/app.wsgi
+    networks:
+      - external_network
+    healthcheck:
+        test: curl --fail http://localhost:5000/ping || exit 1
+        interval: 10s
+        timeout: 2s
+        retries: 5
+    ports:
+      - 5000:80
+
+networks:
+  external_network:
+    driver: bridge
+    ipam:
+      driver: default
 ```
+
+## Limitations
+
+Only plain HTTP communication with the resulting app is supported at the moment.
