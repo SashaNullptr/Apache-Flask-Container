@@ -88,9 +88,10 @@ services:
     image: flask_app:latest
     build: .
       args:
-        ARG APP_ROOT_DIR : ./example_app
-        ARG FLASK_ROOT_FILE: ./flask_app.py
-        ARG WSGI_FILE: ./apache2_files/app.wsgi
+        APP_ROOT_DIR: ./example_app
+        FLASK_ROOT_FILE: ./flask_app.py
+        WSGI_FILE: ./apache2_files/app.wsgi
+        APACHE_CONF: ./apache2_files/app.conf
     networks:
       - external_network
     healthcheck:
