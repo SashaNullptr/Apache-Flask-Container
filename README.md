@@ -20,6 +20,7 @@ following *must* be specified at build time.
 | APP_ROOT_DIR    | Project root directory                    |
 | FLASK_ROOT_FILE | Root Flask app Python file                |
 | WSGI_FILE       | WSGI file that references FLASK_ROOT_FILE |
+| APACHE_CONF     | Apache2 `.conf` file                       |
 
 For example if our Flask app had the following layout:
 
@@ -27,6 +28,7 @@ For example if our Flask app had the following layout:
 .
 ├── Dockerfile
 ├── apache2_files
+│   └── app.conf
 │   └── app.wsgi
 ├── example_app
 │   ├── __init__.py
@@ -41,6 +43,7 @@ We'd want our build args set up like so:
 | APP_ROOT_DIR    | ./example_app            |
 | FLASK_ROOT_FILE | ./flask_app.py           |
 | WSGI_FILE       | ./apache2_files/app.wsgi |
+| APACHE_CONF     | ./apache2_files/app.conf |
 
 ## Build The Docker Image
 
@@ -52,6 +55,7 @@ docker build -dt \
   --build-arg APP_ROOT_DIR="./example_app" \
   --build-arg FLASK_ROOT_FILE="./flask_app.py" \
   --build-arg WSGI_FILE="./apache2_files/app.wsgi" \
+  --build-arg APACHE_CONF="./apache2_files/app.conf" \
   --name flask-app \
   .
 ```
