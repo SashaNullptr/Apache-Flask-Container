@@ -86,9 +86,10 @@ services:
   flask:
     restart: always
     image: flask_app:latest
-    build: .
+    build:
+      context: ./
       args:
-        APP_ROOT_DIR: ./example_app
+        APP_ROOT_DIR: ./
         FLASK_ROOT_FILE: ./flask_app.py
         WSGI_FILE: ./apache2_files/app.wsgi
         APACHE_CONF: ./apache2_files/app.conf
@@ -107,6 +108,7 @@ networks:
     driver: bridge
     ipam:
       driver: default
+
 ```
 
 ## Limitations
