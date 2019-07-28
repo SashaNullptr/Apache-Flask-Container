@@ -133,6 +133,8 @@ apt-get install python-certbot-apache
 certbot --apache -d $SITE_URL
 # Select `app.conf` when prompted
 
-# Add the following line to crontab to enable automatic renewal of certificates.
-15 3 * * * /usr/bin/certbot renew --quiet
+a2enmod rewrite
+
+# Set up cron job to handle automatic renewal of certificates.
+(crontab -l 2>/dev/null; echo "15 3 * * * /usr/bin/certbot renew --quiet") | crontab -
 ```
