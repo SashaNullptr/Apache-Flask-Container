@@ -129,11 +129,9 @@ apt-get install software-properties-common
 add-apt-repository ppa:certbot/certbot
 apt-get update
 apt-get install python-certbot-apache
-certbot --apache -d $SITE_URL
-a2enmod rewrite
 
+certbot --apache -d $SITE_URL
 # Select `app.conf` when prompted
-crontab -e
 
 # Add the following line to crontab to enable automatic renewal of certificates.
 15 3 * * * /usr/bin/certbot renew --quiet
