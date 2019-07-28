@@ -113,4 +113,28 @@ networks:
 
 ## Limitations
 
-Only plain HTTP communication with the resulting app is supported at the moment.
+Only plain HTTP communication with the resulting app is supported "out of the box"
+at the moment.
+
+### Manually adding SSL Encryption
+
+Here's an example of the steps required to _manually_ set up SSL certificates
+through Let's Encrypt after a container is already provisioned and running.
+
+``` shell
+# Base Ubuntu Docker image cannot add PPA's by default
+# We need to install software-properties-common in order to enable this functionality
+apt-get install software-properties-common
+
+add-apt-repository ppa:certbot/certbot
+apt-get update
+apt-get install python-certbot-apache
+certbot --apache -d $SITE_URL
+a2enmod rewrite
+
+# Select `app.conf` when prompted
+crontab -e
+
+# Add the following line to crontab to enable automatic renewal of certificates.
+15 3 * * * /usr/bin/certbot renew --quiet
+```
